@@ -642,7 +642,7 @@ async function runValidator(options: ValidatorOptions): Promise<void> {
     },
     new Date().toISOString(),
   );
-  const { privateKey, publicKey } = await loadSigningKeys(options.inputRoot);
+  const { privateKey } = await loadSigningKeys(options.inputRoot);
   const envelope = signRecommendationPayload(payload, privateKey);
   await writeJsonAtomic(
     path.join(options.inputRoot, "bootstrap-recommendations.json"),
@@ -654,7 +654,6 @@ async function runValidator(options: ValidatorOptions): Promise<void> {
   console.log(
     `Pinned public key: ${path.join(options.inputRoot, "bootstrap-recommendations-public.pem")}`,
   );
-  void publicKey;
 }
 
 async function readGeoCache(filePath: string): Promise<Map<string, GeoRecord>> {

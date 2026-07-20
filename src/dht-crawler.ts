@@ -3,6 +3,7 @@ import {
   readdir,
   readFile,
   rename,
+  stat,
   writeFile,
 } from "node:fs/promises";
 import { createRequire } from "node:module";
@@ -17,6 +18,7 @@ const HyperDHT = require("hyperdht") as HyperDhtConstructor;
 
 const APNIC_URL =
   "https://ftp.apnic.net/stats/apnic/delegated-apnic-latest";
+const APNIC_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1_000;
 
 export interface Ipv4Range {
   start: number;
@@ -722,19 +724,39 @@ function ipv4ToNumber(host: string): number | null {
     .reduce((value, octet) => value * 256 + octet, 0);
 }
 
-async function loadApnicData(outputDir: string): Promise<string> {
+export async function loadApnicData(
+  outputDir: string,
+  options: {
+    now?: number;
+    download?: () => Promise<string>;
+  } = {},
+): Promise<string> {
   const cachePath = path.join(outputDir, "delegated-apnic-latest");
   try {
-    return await readFile(cachePath, "utf8");
-  } catch {
-    const response = await fetch(APNIC_URL);
-    if (!response.ok) {
-      throw new Error(`APNIC download failed: HTTP ${response.status}`);
+    const cache = await stat(cachePath);
+    if (
+      (options.now ?? Date.now()) - cache.mtimeMs <=
+      APNIC_CACHE_TTL_MS
+    ) {
+      return await readFile(cachePath, "utf8");
     }
-    const body = await response.text();
-    await writeFile(cachePath, body, "utf8");
-    return body;
+  } catch {
+    // A missing or unreadable cache is refreshed below.
   }
+
+  const body = options.download
+    ? await options.download()
+    : await downloadApnicData();
+  await writeFile(cachePath, body, "utf8");
+  return body;
+}
+
+async function downloadApnicData(): Promise<string> {
+  const response = await fetch(APNIC_URL);
+  if (!response.ok) {
+    throw new Error(`APNIC download failed: HTTP ${response.status}`);
+  }
+  return response.text();
 }
 
 async function writeJsonLines(

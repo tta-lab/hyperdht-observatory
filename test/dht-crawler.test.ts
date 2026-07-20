@@ -1,5 +1,12 @@
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, rm, writeFile } from "node:fs/promises";
+import {
+  mkdtemp,
+  mkdir,
+  readFile,
+  rm,
+  utimes,
+  writeFile,
+} from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
@@ -7,6 +14,7 @@ import { test } from "node:test";
 import {
   aggregateGraphReplies,
   isCnIpv4,
+  loadApnicData,
   parseCnIpv4Ranges,
   readCrawlerHistory,
   recordGraphNovelty,
@@ -36,6 +44,30 @@ test("parses mainland China IPv4 allocations from APNIC data", () => {
   assert.equal(isCnIpv4("1.0.1.42", ranges), true);
   assert.equal(isCnIpv4("1.0.4.1", ranges), false);
   assert.equal(isCnIpv4("not-an-ip", ranges), false);
+});
+
+test("refreshes APNIC data when the disk cache is older than seven days", async () => {
+  const directory = await mkdtemp(
+    path.join(os.tmpdir(), "hyperdht-observatory-apnic-"),
+  );
+  const cachePath = path.join(directory, "delegated-apnic-latest");
+  const now = new Date("2026-07-20T00:00:00.000Z");
+  const stale = new Date("2026-07-12T00:00:00.000Z");
+
+  try {
+    await writeFile(cachePath, "old allocations", "utf8");
+    await utimes(cachePath, stale, stale);
+
+    const result = await loadApnicData(directory, {
+      now: now.getTime(),
+      download: async () => "new allocations",
+    });
+
+    assert.equal(result, "new allocations");
+    assert.equal(await readFile(cachePath, "utf8"), "new allocations");
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
 });
 
 test("summarizes observations by stable IP and UDP port", () => {
