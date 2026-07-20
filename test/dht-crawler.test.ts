@@ -16,7 +16,7 @@ import {
   summarizeObservations,
   type GraphReply,
   type NodeObservation,
-} from "../src/tools/dht-crawler.js";
+} from "../src/dht-crawler.js";
 
 const delegatedApnic = [
   "# comment",

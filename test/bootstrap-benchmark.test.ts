@@ -9,7 +9,7 @@ import {
   runBootstrapProbe,
   summarizeBenchmark,
   type BootstrapBenchmarkResult,
-} from "../src/tools/bootstrap-benchmark.js";
+} from "../src/bootstrap-benchmark.js";
 
 const recommendations = {
   algorithm: "Ed25519",

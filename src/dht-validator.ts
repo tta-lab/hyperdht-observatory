@@ -782,7 +782,7 @@ function parseOptions(argv: string[]): ValidatorOptions {
   return {
     inputRoot: path.resolve(
       values.get("--input") ??
-        path.join(os.homedir(), ".local", "state", "kepos-neo", "dht-graph"),
+        path.join(os.homedir(), ".local", "state", "hyperdht-observatory"),
     ),
     limit: positiveInteger("--limit", 3),
     timeoutMs: positiveInteger("--timeout-ms", 45_000),

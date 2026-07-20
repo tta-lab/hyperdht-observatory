@@ -10,8 +10,10 @@ import {
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
-import { parseClientIdentity } from "../keys.js";
-import { keyPairFromSecretKey } from "../mux/hyperdht.js";
+import {
+  keyPairFromSecretKey,
+  parseClientIdentity,
+} from "./identity.js";
 import {
   buildBootstrapGroups,
   runBootstrapBenchmark,

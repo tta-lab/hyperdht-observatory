@@ -1,0 +1,26 @@
+{
+  "name": "hyperdht-observatory",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "npm@10.9.8",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test",
+    "crawl:dht": "tsx src/dht-crawler.ts",
+    "report:dht": "tsx src/dht-report.ts",
+    "validate:dht": "tsx src/dht-validator.ts",
+    "benchmark:bootstrap": "tsx src/bootstrap-benchmark-cli.ts"
+  },
+  "dependencies": {
+    "hyperdht": "^6.33.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "tsx": "^4.23.0",
+    "typescript": "^7.0.2"
+  }
+}

@@ -820,7 +820,7 @@ function parseOptions(argv: string[]): CrawlerOptions {
   );
   const outputRoot = path.resolve(
     values.get("--output") ??
-      path.join(os.homedir(), ".local", "state", "kepos-neo", "dht-graph"),
+      path.join(os.homedir(), ".local", "state", "hyperdht-observatory"),
   );
   if (!Number.isInteger(targets) || targets <= 0) {
     throw new Error("--targets must be a positive integer");

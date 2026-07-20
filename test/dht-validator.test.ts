@@ -19,8 +19,8 @@ import {
   type BootstrapDiscovery,
   type BootstrapCandidate,
   type BootstrapValidation,
-} from "../src/tools/dht-validator.js";
-import type { GeoRecord } from "../src/tools/dht-report.js";
+} from "../src/dht-validator.js";
+import type { GeoRecord } from "../src/dht-report.js";
 
 const geos = new Map<string, GeoRecord>([
   [

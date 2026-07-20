@@ -767,7 +767,7 @@ function parseOptions(argv: string[]): ReportOptions {
 
   const inputDir = path.resolve(
     values.get("--input") ??
-      path.join(os.homedir(), ".local", "state", "kepos-neo", "dht-graph"),
+      path.join(os.homedir(), ".local", "state", "hyperdht-observatory"),
   );
   return {
     enrich,

@@ -17,11 +17,11 @@ import {
   readReportRecommendations,
   renderReportHtml,
   type GeoRecord,
-} from "../src/tools/dht-report.js";
+} from "../src/dht-report.js";
 import type {
   NodeObservation,
   NodeSummary,
-} from "../src/tools/dht-crawler.js";
+} from "../src/dht-crawler.js";
 
 const execFileAsync = promisify(execFile);
 
@@ -415,7 +415,7 @@ test("the report CLI includes recommendations from the input directory", async (
       [
         "--import",
         "tsx",
-        path.resolve("src/tools/dht-report.ts"),
+        path.resolve("src/dht-report.ts"),
         "--input",
         root,
       ],

@@ -1,4 +1,15 @@
-# HyperDHT graph snapshots
+# HyperDHT Observatory
+
+HyperDHT Observatory crawls, validates, benchmarks, and visualizes public
+HyperDHT endpoints. It is a network research tool, not a bootstrap authority
+or a relay.
+
+This repository preserves the original crawler history extracted from
+[`tta-lab/kepos-neo`](https://github.com/tta-lab/kepos-neo). Kepos does not
+depend on Observatory at runtime; applications must review and pin any
+bootstrap endpoints they choose to use.
+
+## HyperDHT graph snapshots
 
 This tool explores adjacency in the public HyperDHT and saves a bounded graph
 snapshot. It checks whether the network contains stable nodes with mainland
